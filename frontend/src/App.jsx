@@ -14,11 +14,13 @@ function App() {
   const [type, setType] = useState("expense");
   const [expenses, setExpenses] = useState([]);
 
+  const BASE_URL = "https://self-tracker-1mv0.onrender.com";
+
   // ✅ REGISTER
   const register = async (e) => {
     e.preventDefault();
 
-    const res = await fetch("http://localhost:5000/api/auth/register", {
+    const res = await fetch(`${BASE_URL}/api/auth/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -43,7 +45,7 @@ function App() {
   const login = async (e) => {
     e.preventDefault();
 
-    const res = await fetch("http://localhost:5000/api/auth/login", {
+    const res = await fetch(`${BASE_URL}/api/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -64,7 +66,7 @@ function App() {
 
   // ✅ FETCH EXPENSES
   const fetchExpenses = async () => {
-    const res = await fetch("http://localhost:5000/api/expenses", {
+    const res = await fetch(`${BASE_URL}/api/expenses`, {
       headers: {
         Authorization: token,
       },
@@ -82,7 +84,7 @@ function App() {
   const addExpense = async (e) => {
     e.preventDefault();
 
-    await fetch("http://localhost:5000/api/expenses/add", {
+    await fetch(`${BASE_URL}/api/expenses/add`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -104,7 +106,7 @@ function App() {
 
   // ✅ DELETE
   const deleteExpense = async (id) => {
-    await fetch(`http://localhost:5000/api/expenses/${id}`, {
+    await fetch(`${BASE_URL}/api/expenses/${id}`, {
       method: "DELETE",
       headers: {
         Authorization: token,
@@ -133,15 +135,13 @@ function App() {
 
         <form onSubmit={isLogin ? login : register}>
           {!isLogin && (
-            <>
-              <input
-                type="text"
-                placeholder="Name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-              />
-            </>
+            <input
+              type="text"
+              placeholder="Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
           )}
 
           <input
@@ -167,10 +167,7 @@ function App() {
 
         <br />
 
-        <button
-          type="button"
-          onClick={() => setIsLogin(!isLogin)}
-        >
+        <button type="button" onClick={() => setIsLogin(!isLogin)}>
           {isLogin
             ? "New user? Register"
             : "Already have account? Login"}
@@ -179,7 +176,7 @@ function App() {
     );
   }
 
-  // 📊 DASHBOARD UI
+  // 📊 DASHBOARD
   return (
     <div className="container">
       <h1>💸 Self Tracker</h1>
