@@ -1,36 +1,37 @@
 import express from "express";
 import mongoose from "mongoose";
-import cors from "cors";
 import dotenv from "dotenv";
+import cors from "cors";
 
-import expenseRoutes from "./routes/expenseRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
+import expenseRoutes from "./routes/expenseRoutes.js";
 
 dotenv.config();
 
 const app = express();
 
-// middleware
-app.use(express.json());
-app.use(cors());
+// ✅ CORS FIX (IMPORTANT for Vercel)
+app.use(cors({
+  origin: "https://self-tracker-xi.vercel.app",
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
+}));
 
-// routes
+// ✅ MIDDLEWARE
+app.use(express.json());
+
+// ✅ ROUTES
 app.use("/api/auth", authRoutes);
 app.use("/api/expenses", expenseRoutes);
 
-// test route
-app.get("/", (req, res) => {
-  res.send("API is running...");
-});
-
-// DB + server
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => {
-    console.log("MongoDB Connected ✅");
-
-    app.listen(process.env.PORT || 5000, () => {
-      console.log(`Server running on port ${process.env.PORT || 5000}`);
-    });
-  })
+// ✅ CONNECT DB
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log("MongoDB Connected ✅"))
   .catch((err) => console.log(err));
+
+// ✅ PORT
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
