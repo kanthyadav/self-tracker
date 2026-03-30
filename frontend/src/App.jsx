@@ -3,7 +3,25 @@ import "./App.css";
 
 let deferredPrompt;
 
+const Splash = () => {
+  return (
+    <div style={{
+      height: "100vh",
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center",
+      background: "#f5f7fa"
+    }}>
+      <h1>💸 Self Tracker</h1>
+      <p>by Laxmikanth Yadav 🚀</p>
+      <p>Loading...</p>
+    </div>
+  );
+};
+
 function App() {
+  const [loading, setLoading] = useState(true);
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [isLogin, setIsLogin] = useState(true);
   const [showInstall, setShowInstall] = useState(false);
@@ -19,7 +37,14 @@ function App() {
 
   const BASE_URL = "https://self-tracker-1mv0.onrender.com";
 
-  // 🔥 PWA INSTALL HANDLER
+  // 🔥 Splash timer
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+  }, []);
+
+  // 🔥 PWA install
   useEffect(() => {
     window.addEventListener("beforeinstallprompt", (e) => {
       e.preventDefault();
@@ -147,6 +172,9 @@ function App() {
 
   const balance = income - expense;
 
+  // 🔥 Show splash first
+  if (loading) return <Splash />;
+
   // 🔐 AUTH UI
   if (!token) {
     return (
@@ -200,8 +228,11 @@ function App() {
   return (
     <div className="container">
       <h1>💸 Self Tracker</h1>
+      <p style={{ textAlign: "center", fontSize: "14px", color: "gray" }}>
+        by Laxmikanth Yadav 🚀
+      </p>
 
-      {/* 🔥 INSTALL BUTTON */}
+      {/* Install Button */}
       {showInstall && (
         <button
           onClick={installApp}
