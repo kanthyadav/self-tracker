@@ -1,26 +1,8 @@
 import { useState, useEffect } from "react";
 import "./App.css";
 
-let deferredPrompt;
-
-const Splash = () => {
-  return (
-    <div style={{
-      height: "100vh",
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "center",
-      alignItems: "center",
-      background: "#f5f7fa"
-    }}>
-      <h1>💸 Self Tracker</h1>
-      <p>by Laxmikanth Yadav 🚀</p>
-      <p>Loading...</p>
-    </div>
-  );
-};
-
 function App() {
+  // ✅ STATES
   const [loading, setLoading] = useState(true);
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [isLogin, setIsLogin] = useState(true);
@@ -37,27 +19,32 @@ function App() {
 
   const BASE_URL = "https://self-tracker-1mv0.onrender.com";
 
-  // 🔥 Splash timer
+  // 🔥 Splash screen timer
   useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 2000);
+    const timer = setTimeout(() => setLoading(false), 2000);
+    return () => clearTimeout(timer);
   }, []);
 
   // 🔥 PWA install
   useEffect(() => {
-    window.addEventListener("beforeinstallprompt", (e) => {
+    const handler = (e) => {
       e.preventDefault();
-      deferredPrompt = e;
+      window.deferredPrompt = e;
       setShowInstall(true);
-    });
+    };
+
+    window.addEventListener("beforeinstallprompt", handler);
+
+    return () => {
+      window.removeEventListener("beforeinstallprompt", handler);
+    };
   }, []);
 
   const installApp = async () => {
-    if (!deferredPrompt) return;
-    deferredPrompt.prompt();
-    await deferredPrompt.userChoice;
-    deferredPrompt = null;
+    if (!window.deferredPrompt) return;
+    window.deferredPrompt.prompt();
+    await window.deferredPrompt.userChoice;
+    window.deferredPrompt = null;
     setShowInstall(false);
   };
 
@@ -161,7 +148,7 @@ function App() {
     fetchExpenses();
   };
 
-  // ✅ BALANCE
+  // ✅ CALCULATIONS
   const income = expenses
     .filter((i) => i.type === "income")
     .reduce((a, i) => a + i.amount, 0);
@@ -172,8 +159,23 @@ function App() {
 
   const balance = income - expense;
 
-  // 🔥 Show splash first
-  if (loading) return <Splash />;
+  // 🔥 SPLASH SCREEN
+  if (loading) {
+    return (
+      <div style={{
+        height: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        background: "#f5f7fa"
+      }}>
+        <h1>💸 Self Tracker</h1>
+        <p>by Laxmikanth Yadav 🚀</p>
+        <p>Loading...</p>
+      </div>
+    );
+  }
 
   // 🔐 AUTH UI
   if (!token) {
@@ -228,23 +230,19 @@ function App() {
   return (
     <div className="container">
       <h1>💸 Self Tracker</h1>
-      <p style={{ textAlign: "center", fontSize: "14px", color: "gray" }}>
+      <p style={{ textAlign: "center", color: "gray" }}>
         by Laxmikanth Yadav 🚀
       </p>
 
-      {/* Install Button */}
       {showInstall && (
-        <button
-          onClick={installApp}
-          style={{
-            width: "100%",
-            marginBottom: "10px",
-            padding: "10px",
-            background: "#4f46e5",
-            color: "white",
-            border: "none",
-          }}
-        >
+        <button onClick={installApp} style={{
+          width: "100%",
+          marginBottom: "10px",
+          padding: "10px",
+          background: "#4f46e5",
+          color: "white",
+          border: "none"
+        }}>
           Install App 📱
         </button>
       )}
@@ -259,12 +257,9 @@ function App() {
         Logout
       </button>
 
-      <h2 className="balance">Balance: ₹{balance}</h2>
-
-      <div className="summary">
-        <p className="income">Income: ₹{income}</p>
-        <p className="expense">Expense: ₹{expense}</p>
-      </div>
+      <h2>Balance: ₹{balance}</h2>
+      <p>Income: ₹{income}</p>
+      <p>Expense: ₹{expense}</p>
 
       <form onSubmit={addExpense}>
         <input
@@ -293,29 +288,13 @@ function App() {
 
       <h3>Transactions</h3>
 
-      {expenses.length === 0 ? (
-        <p>No transactions</p>
-      ) : (
-        expenses.map((item) => (
-          <div
-            key={item._id}
-            className={`transaction ${
-              item.type === "income"
-                ? "income-border"
-                : "expense-border"
-            }`}
-          >
-            <span>{item.title}</span>
-            <span>₹{item.amount}</span>
-            <button
-              className="delete-btn"
-              onClick={() => deleteExpense(item._id)}
-            >
-              X
-            </button>
-          </div>
-        ))
-      )}
+      {expenses.map((item) => (
+        <div key={item._id}>
+          <span>{item.title}</span>
+          <span> ₹{item.amount}</span>
+          <button onClick={() => deleteExpense(item._id)}>X</button>
+        </div>
+      ))}
     </div>
   );
 }
