@@ -1,9 +1,12 @@
 import { useState, useEffect } from "react";
 import "./App.css";
 
+let deferredPrompt;
+
 function App() {
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [isLogin, setIsLogin] = useState(true);
+  const [showInstall, setShowInstall] = useState(false);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -15,6 +18,23 @@ function App() {
   const [expenses, setExpenses] = useState([]);
 
   const BASE_URL = "https://self-tracker-1mv0.onrender.com";
+
+  // 🔥 PWA INSTALL HANDLER
+  useEffect(() => {
+    window.addEventListener("beforeinstallprompt", (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      setShowInstall(true);
+    });
+  }, []);
+
+  const installApp = async () => {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    await deferredPrompt.userChoice;
+    deferredPrompt = null;
+    setShowInstall(false);
+  };
 
   // ✅ REGISTER
   const register = async (e) => {
@@ -180,6 +200,23 @@ function App() {
   return (
     <div className="container">
       <h1>💸 Self Tracker</h1>
+
+      {/* 🔥 INSTALL BUTTON */}
+      {showInstall && (
+        <button
+          onClick={installApp}
+          style={{
+            width: "100%",
+            marginBottom: "10px",
+            padding: "10px",
+            background: "#4f46e5",
+            color: "white",
+            border: "none",
+          }}
+        >
+          Install App 📱
+        </button>
+      )}
 
       <button
         className="logout"
