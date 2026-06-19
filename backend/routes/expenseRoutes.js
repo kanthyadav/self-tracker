@@ -19,6 +19,13 @@ router.get(
   getExpenses
 );
 
+// ANALYTICS
+router.get(
+  "/analytics",
+  auth,
+  getAnalytics
+);
+
 // ADD EXPENSE
 router.post(
   "/add",
@@ -38,13 +45,6 @@ router.delete(
   "/:id",
   auth,
   deleteExpense
-);
-
-// ANALYTICS
-router.get(
-  "/analytics",
-  auth,
-  getAnalytics
 );
 
 export default router;
