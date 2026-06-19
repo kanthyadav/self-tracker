@@ -58,15 +58,15 @@ A full-stack Expense Tracker application built using the MERN Stack (MongoDB, Ex
 
 ### 🔐 Login Page
 
-![Login Page](screenshots/selflogin.png)
+![Login Page](screenshots/selflogin.jpeg)
 
 ### 🏠 Dashboard
 
-![Dashboard](screenshots/selfhome.png)
+![Dashboard](screenshots/selfhome.jpeg)
 
 ### 📈 Expense Analytics Pie Chart
 
-![Analytics](screenshots/selfpie.png)
+![Analytics](screenshots/selfpie.jpeg)
 
 ---
 
