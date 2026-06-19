@@ -1,9 +1,21 @@
 import { useEffect, useState } from "react";
+import ExpenseForm from "../components/ExpenseForm";
+import AnalyticsCards from "../components/AnalyticsCards";
+import ExpensePieChart from "../components/ExpensePieChart";
 
 function Dashboard({ setToken }) {
   const [expenses, setExpenses] = useState([]);
+  const [editingId, setEditingId] = useState(null);
+  const [editTitle, setEditTitle] = useState("");
+  const [editAmount, setEditAmount] = useState("");
+  const [activePage, setActivePage] =
+    useState("dashboard");
 
-  const API_URL = "http://localhost:5000";
+  const API_URL =
+    "https://self-tracker-1mv0.onrender.com";
+
+  const token =
+    localStorage.getItem("token");
 
   const logout = () => {
     localStorage.removeItem("token");
@@ -12,8 +24,6 @@ function Dashboard({ setToken }) {
 
   const fetchExpenses = async () => {
     try {
-      const token = localStorage.getItem("token");
-
       const res = await fetch(
         `${API_URL}/api/expenses`,
         {
@@ -25,25 +35,16 @@ function Dashboard({ setToken }) {
 
       const data = await res.json();
 
-      console.log("Expenses API Response:");
-      console.log(data);
-
       if (Array.isArray(data)) {
         setExpenses(data);
-      } else {
-        setExpenses([]);
       }
-
     } catch (error) {
       console.log(error);
-      setExpenses([]);
     }
   };
 
   const deleteExpense = async (id) => {
     try {
-      const token = localStorage.getItem("token");
-
       await fetch(
         `${API_URL}/api/expenses/${id}`,
         {
@@ -55,7 +56,33 @@ function Dashboard({ setToken }) {
       );
 
       fetchExpenses();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
+  const updateExpense = async (id) => {
+    try {
+      await fetch(
+        `${API_URL}/api/expenses/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type":
+              "application/json",
+            Authorization: token,
+          },
+          body: JSON.stringify({
+            title: editTitle,
+            amount: Number(editAmount),
+            type: "expense",
+          }),
+        }
+      );
+
+      setEditingId(null);
+
+      fetchExpenses();
     } catch (error) {
       console.log(error);
     }
@@ -69,23 +96,77 @@ function Dashboard({ setToken }) {
     <div
       style={{
         padding: "20px",
-        maxWidth: "800px",
+        maxWidth: "900px",
         margin: "auto",
       }}
     >
       <div
         style={{
           display: "flex",
-          justifyContent: "space-between",
+          justifyContent:
+            "space-between",
           alignItems: "center",
         }}
       >
-        <h1>Expense Tracker 🚀</h1>
+        <h1>
+          Expense Tracker 🚀
+        </h1>
 
-        <button onClick={logout}>
-          Logout
-        </button>
+        <div
+          style={{
+            display: "flex",
+            gap: "10px",
+          }}
+        >
+          <button
+            onClick={() =>
+              setActivePage(
+                "dashboard"
+              )
+            }
+          >
+            🏠 Home
+          </button>
+
+          <button
+            onClick={() =>
+              setActivePage(
+                "chart"
+              )
+            }
+          >
+            📊 Pie Chart
+          </button>
+
+          <button
+            onClick={logout}
+          >
+            Logout
+          </button>
+        </div>
       </div>
+
+      <hr />
+
+      <AnalyticsCards
+        token={token}
+      />
+
+      {activePage ===
+        "chart" && (
+        <ExpensePieChart
+          token={token}
+        />
+      )}
+
+      <hr />
+
+      <ExpenseForm
+        fetchExpenses={
+          fetchExpenses
+        }
+        token={token}
+      />
 
       <hr />
 
@@ -94,36 +175,112 @@ function Dashboard({ setToken }) {
       {expenses.length === 0 ? (
         <p>No expenses found</p>
       ) : (
-        Array.isArray(expenses) &&
-        expenses.map((expense) => (
-          <div
-            key={expense._id}
-            style={{
-              border: "1px solid #ddd",
-              padding: "10px",
-              marginBottom: "10px",
-              borderRadius: "8px",
-            }}
-          >
-            <h3>{expense.title}</h3>
-
-            <p>
-              Amount: ₹{expense.amount}
-            </p>
-
-            <p>
-              Type: {expense.type}
-            </p>
-
-            <button
-              onClick={() =>
-                deleteExpense(expense._id)
-              }
+        expenses.map(
+          (expense) => (
+            <div
+              key={expense._id}
+              style={{
+                border:
+                  "1px solid #ddd",
+                padding: "12px",
+                marginBottom:
+                  "10px",
+                borderRadius:
+                  "8px",
+              }}
             >
-              Delete
-            </button>
-          </div>
-        ))
+              {editingId ===
+              expense._id ? (
+                <>
+                  <input
+                    value={
+                      editTitle
+                    }
+                    onChange={(e) =>
+                      setEditTitle(
+                        e.target.value
+                      )
+                    }
+                  />
+
+                  <input
+                    type="number"
+                    value={
+                      editAmount
+                    }
+                    onChange={(e) =>
+                      setEditAmount(
+                        e.target.value
+                      )
+                    }
+                  />
+
+                  <button
+                    onClick={() =>
+                      updateExpense(
+                        expense._id
+                      )
+                    }
+                  >
+                    Save
+                  </button>
+                </>
+              ) : (
+                <>
+                  <h3>
+                    {
+                      expense.title
+                    }
+                  </h3>
+
+                  <p>
+                    Amount: ₹
+                    {
+                      expense.amount
+                    }
+                  </p>
+
+                  <p>
+                    Type:{" "}
+                    {
+                      expense.type
+                    }
+                  </p>
+
+                  <button
+                    onClick={() => {
+                      setEditingId(
+                        expense._id
+                      );
+                      setEditTitle(
+                        expense.title
+                      );
+                      setEditAmount(
+                        expense.amount
+                      );
+                    }}
+                  >
+                    Edit
+                  </button>
+
+                  <button
+                    onClick={() =>
+                      deleteExpense(
+                        expense._id
+                      )
+                    }
+                    style={{
+                      marginLeft:
+                        "10px",
+                    }}
+                  >
+                    Delete
+                  </button>
+                </>
+              )}
+            </div>
+          )
+        )
       )}
     </div>
   );
