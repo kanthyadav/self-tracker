@@ -1,53 +1,50 @@
 import express from "express";
-import Expense from "../models/Expense.js";
-import authMiddleware from "../middleware/authMiddleware.js";
+
+import auth from "../middleware/authMiddleware.js";
+
+import {
+  getExpenses,
+  addExpense,
+  updateExpense,
+  deleteExpense,
+  getAnalytics,
+} from "../controllers/expenseController.js";
 
 const router = express.Router();
 
-// ADD
-router.post("/add", authMiddleware, async (req, res) => {
-  try {
-    const { title, amount, type, category } = req.body;
+// GET ALL EXPENSES
+router.get(
+  "/",
+  auth,
+  getExpenses
+);
 
-    const expense = new Expense({
-      title,
-      amount,
-      type,
-      category,
-      user: req.user,
-    });
+// ADD EXPENSE
+router.post(
+  "/add",
+  auth,
+  addExpense
+);
 
-    await expense.save();
-    res.status(201).json(expense);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
+// UPDATE EXPENSE
+router.put(
+  "/:id",
+  auth,
+  updateExpense
+);
 
-// GET
-router.get("/", authMiddleware, async (req, res) => {
-  try {
-    const expenses = await Expense.find({ user: req.user }).sort({
-      date: -1,
-    });
-    res.json(expenses);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
+// DELETE EXPENSE
+router.delete(
+  "/:id",
+  auth,
+  deleteExpense
+);
 
-// DELETE
-router.delete("/:id", authMiddleware, async (req, res) => {
-  try {
-    await Expense.findOneAndDelete({
-      _id: req.params.id,
-      user: req.user,
-    });
-
-    res.json({ message: "Deleted successfully" });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
+// ANALYTICS
+router.get(
+  "/analytics",
+  auth,
+  getAnalytics
+);
 
 export default router;

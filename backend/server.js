@@ -5,33 +5,39 @@ import cors from "cors";
 
 import authRoutes from "./routes/authRoutes.js";
 import expenseRoutes from "./routes/expenseRoutes.js";
+import aiRoutes from "./routes/aiRoutes.js";
 
 dotenv.config();
 
 const app = express();
 
-// ✅ CORS FIX (IMPORTANT for Vercel)
-app.use(cors({
-  origin: "https://self-tracker-xi.vercel.app",
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true
-}));
+// MIDDLEWARE
+app.use(cors());
 
-// ✅ MIDDLEWARE
 app.use(express.json());
 
-// ✅ ROUTES
+// ROUTES
 app.use("/api/auth", authRoutes);
+
 app.use("/api/expenses", expenseRoutes);
 
-// ✅ CONNECT DB
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB Connected ✅"))
-  .catch((err) => console.log(err));
+app.use("/api/ai", aiRoutes);
 
-// ✅ PORT
+// DATABASE
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => {
+    console.log("MongoDB Connected ✅");
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+
+// PORT
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(
+    `Server running on port ${PORT}`
+  );
 });

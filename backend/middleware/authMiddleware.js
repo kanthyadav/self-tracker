@@ -5,16 +5,24 @@ const authMiddleware = (req, res, next) => {
     const token = req.headers.authorization;
 
     if (!token) {
-      return res.status(401).json({ message: "No token, access denied" });
+      return res.status(401).json({
+        message: "No token, access denied",
+      });
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(
+      token,
+      process.env.JWT_SECRET
+    );
 
-    req.user = decoded.id;
+    // FIXED HERE
+    req.user = decoded.userId;
 
     next();
   } catch (error) {
-    res.status(401).json({ message: "Invalid token" });
+    res.status(401).json({
+      message: "Invalid token",
+    });
   }
 };
 
