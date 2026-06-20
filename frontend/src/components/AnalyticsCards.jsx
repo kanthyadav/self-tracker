@@ -28,10 +28,6 @@ function AnalyticsCards({ token }) {
         data
       );
 
-      alert(
-        JSON.stringify(data)
-      );
-
       setAnalytics(data);
     } catch (error) {
       console.log(error);
@@ -45,46 +41,18 @@ function AnalyticsCards({ token }) {
   }, [token]);
 
   return (
-    <div
-      style={{
-        display: "flex",
-        gap: "15px",
-        marginBottom: "20px",
-        flexWrap: "wrap",
-      }}
-    >
-      <div
-        style={{
-          border: "1px solid #ddd",
-          padding: "15px",
-          borderRadius: "8px",
-          minWidth: "150px",
-        }}
-      >
+    <div className="analytics-container">
+      <div className="analytics-card">
         <h3>Income</h3>
         <p>₹{analytics.income}</p>
       </div>
 
-      <div
-        style={{
-          border: "1px solid #ddd",
-          padding: "15px",
-          borderRadius: "8px",
-          minWidth: "150px",
-        }}
-      >
+      <div className="analytics-card">
         <h3>Expense</h3>
         <p>₹{analytics.expense}</p>
       </div>
 
-      <div
-        style={{
-          border: "1px solid #ddd",
-          padding: "15px",
-          borderRadius: "8px",
-          minWidth: "150px",
-        }}
-      >
+      <div className="analytics-card">
         <h3>Balance</h3>
         <p>₹{analytics.balance}</p>
       </div>

@@ -93,32 +93,15 @@ function Dashboard({ setToken }) {
   }, []);
 
   return (
-    <div
-      style={{
-        padding: "20px",
-        maxWidth: "900px",
-        margin: "auto",
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          justifyContent:
-            "space-between",
-          alignItems: "center",
-        }}
-      >
-        <h1>
+    <div className="dashboard-container">
+      <div className="dashboard-header">
+        <h1 className="dashboard-title">
           Expense Tracker 🚀
         </h1>
 
-        <div
-          style={{
-            display: "flex",
-            gap: "10px",
-          }}
-        >
+        <div className="dashboard-actions">
           <button
+            className="nav-btn"
             onClick={() =>
               setActivePage(
                 "dashboard"
@@ -129,6 +112,7 @@ function Dashboard({ setToken }) {
           </button>
 
           <button
+            className="nav-btn"
             onClick={() =>
               setActivePage(
                 "chart"
@@ -139,6 +123,7 @@ function Dashboard({ setToken }) {
           </button>
 
           <button
+            className="logout-btn"
             onClick={logout}
           >
             Logout
@@ -170,29 +155,26 @@ function Dashboard({ setToken }) {
 
       <hr />
 
-      <h2>All Expenses</h2>
+      <h2 className="expenses-heading">
+        All Expenses
+      </h2>
 
       {expenses.length === 0 ? (
-        <p>No expenses found</p>
+        <p className="empty-message">
+          No expenses found
+        </p>
       ) : (
         expenses.map(
           (expense) => (
             <div
               key={expense._id}
-              style={{
-                border:
-                  "1px solid #ddd",
-                padding: "12px",
-                marginBottom:
-                  "10px",
-                borderRadius:
-                  "8px",
-              }}
+              className="expense-card"
             >
               {editingId ===
               expense._id ? (
                 <>
                   <input
+                    className="edit-input"
                     value={
                       editTitle
                     }
@@ -204,6 +186,7 @@ function Dashboard({ setToken }) {
                   />
 
                   <input
+                    className="edit-input"
                     type="number"
                     value={
                       editAmount
@@ -216,6 +199,7 @@ function Dashboard({ setToken }) {
                   />
 
                   <button
+                    className="save-btn"
                     onClick={() =>
                       updateExpense(
                         expense._id
@@ -227,20 +211,20 @@ function Dashboard({ setToken }) {
                 </>
               ) : (
                 <>
-                  <h3>
+                  <h3 className="expense-title">
                     {
                       expense.title
                     }
                   </h3>
 
-                  <p>
+                  <p className="expense-amount">
                     Amount: ₹
                     {
                       expense.amount
                     }
                   </p>
 
-                  <p>
+                  <p className="expense-type">
                     Type:{" "}
                     {
                       expense.type
@@ -248,6 +232,7 @@ function Dashboard({ setToken }) {
                   </p>
 
                   <button
+                    className="edit-btn"
                     onClick={() => {
                       setEditingId(
                         expense._id
@@ -264,15 +249,12 @@ function Dashboard({ setToken }) {
                   </button>
 
                   <button
+                    className="delete-btn"
                     onClick={() =>
                       deleteExpense(
                         expense._id
                       )
                     }
-                    style={{
-                      marginLeft:
-                        "10px",
-                    }}
                   >
                     Delete
                   </button>

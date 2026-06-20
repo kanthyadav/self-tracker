@@ -6,10 +6,15 @@ function Navbar({ setToken }) {
   };
 
   return (
-    <div>
-      <h1>Expense Tracker</h1>
+    <div className="navbar">
+      <h1 className="navbar-title">
+        Expense Tracker
+      </h1>
 
-      <button onClick={logout}>
+      <button
+        className="logout-btn"
+        onClick={logout}
+      >
         Logout
       </button>
     </div>

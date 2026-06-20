@@ -60,21 +60,13 @@ function Login({
   };
 
   return (
-    <div
-      style={{
-        height: "100vh",
-        display: "flex",
-        flexDirection:
-          "column",
-        justifyContent:
-          "center",
-        alignItems: "center",
-        gap: "10px",
-      }}
-    >
-      <h1>Login 🔐</h1>
+    <div className="login-container">
+      <h1 className="login-title">
+        Login 🔐
+      </h1>
 
       <input
+        className="login-input"
         type="email"
         placeholder="Email"
         value={email}
@@ -86,6 +78,7 @@ function Login({
       />
 
       <input
+        className="login-input"
         type="password"
         placeholder="Password"
         value={password}
@@ -97,12 +90,14 @@ function Login({
       />
 
       <button
+        className="login-btn"
         onClick={handleLogin}
       >
         Login
       </button>
 
       <button
+        className="switch-auth-btn"
         onClick={() =>
           setIsLogin(false)
         }

@@ -67,14 +67,9 @@ function ExpensePieChart({ token }) {
   };
 
   return (
-    <div
-      style={{
-        maxWidth: "400px",
-        margin: "20px auto",
-      }}
-    >
-      <h2>
-        Expense Overview 📊
+    <div className="pie-chart-container">
+      <h2 className="pie-chart-title">
+        Expense Overview 
       </h2>
 
       <Pie data={data} />

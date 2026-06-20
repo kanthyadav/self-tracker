@@ -23,18 +23,30 @@ function TransactionList({
   };
 
   return (
-    <div>
-      <h2>Transactions</h2>
+    <div className="transaction-list">
+      <h2 className="transaction-heading">
+        Transactions
+      </h2>
 
       {expenses?.map((item) => (
-        <div key={item._id}>
-          <h3>{item.title}</h3>
+        <div
+          key={item._id}
+          className="transaction-card"
+        >
+          <h3 className="transaction-title">
+            {item.title}
+          </h3>
 
-          <p>₹ {item.amount}</p>
+          <p className="transaction-amount">
+            ₹ {item.amount}
+          </p>
 
-          <p>{item.type}</p>
+          <p className="transaction-type">
+            {item.type}
+          </p>
 
           <button
+            className="delete-btn"
             onClick={() =>
               deleteExpense(item._id)
             }

@@ -67,15 +67,9 @@ function ExpenseForm({
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        gap: "10px",
-        marginBottom: "20px",
-        flexWrap: "wrap",
-      }}
-    >
+    <div className="expense-form">
       <input
+        className="expense-input"
         type="text"
         placeholder="Title"
         value={title}
@@ -87,6 +81,7 @@ function ExpenseForm({
       />
 
       <input
+        className="expense-input"
         type="number"
         placeholder="Amount"
         value={amount}
@@ -98,6 +93,7 @@ function ExpenseForm({
       />
 
       <select
+        className="expense-select"
         value={type}
         onChange={(e) =>
           setType(
@@ -115,6 +111,7 @@ function ExpenseForm({
       </select>
 
       <button
+        className="expense-btn"
         onClick={addExpense}
       >
         Add Expense
