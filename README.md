@@ -1,8 +1,8 @@
-# 💰 Expense Tracker Pro
+#  Expense Tracker Pro
 
 A full-stack Expense Tracker application built using the MERN Stack (MongoDB, Express.js, React.js, and Node.js).
 
-## 🚀 Live Demo
+##  Live Demo
 
 **Frontend:** https://self-tracker-xi.vercel.app
 
@@ -10,7 +10,7 @@ A full-stack Expense Tracker application built using the MERN Stack (MongoDB, Ex
 
 ---
 
-## ✨ Features
+##  Features
 
 * User Registration & Login
 * JWT Authentication
@@ -25,7 +25,7 @@ A full-stack Expense Tracker application built using the MERN Stack (MongoDB, Ex
 
 ---
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 ### Frontend
 
@@ -45,7 +45,7 @@ A full-stack Expense Tracker application built using the MERN Stack (MongoDB, Ex
 
 ---
 
-## 📊 Analytics Features
+##  Analytics Features
 
 * Income Tracking
 * Expense Tracking
@@ -54,23 +54,23 @@ A full-stack Expense Tracker application built using the MERN Stack (MongoDB, Ex
 
 ---
 
-## 📸 Screenshots
+##  Screenshots
 
-### 🔐 Login Page
+###  Login Page
 
 ![Login Page](screenshots/selflogin.jpeg)
 
-### 🏠 Dashboard
+###  Dashboard
 
 ![Dashboard](screenshots/selfhome.jpeg)
 
-### 📈 Expense Analytics Pie Chart
+###  Expense Analytics Pie Chart
 
 ![Analytics](screenshots/selfpie.jpeg)
 
 ---
 
-## 📂 Project Structure
+##  Project Structure
 
 self-tracker/
 
@@ -102,7 +102,7 @@ self-tracker/
 
 ---
 
-## ⚡ Installation
+##  Installation
 
 ### Backend
 
@@ -120,7 +120,7 @@ npm run dev
 
 ---
 
-## 👨‍💻 Author
+##  Author
 
 **Laxmikant Yadav**
 
