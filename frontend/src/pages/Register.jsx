@@ -31,7 +31,7 @@ function Register({ setIsLogin }) {
   return (
     <div className="register-container">
       <h1 className="register-title">
-        Register 📝
+        Register 
       </h1>
 
       <form

@@ -62,7 +62,7 @@ function Login({
   return (
     <div className="login-container">
       <h1 className="login-title">
-        Login 🔐
+        Login 
       </h1>
 
       <input
